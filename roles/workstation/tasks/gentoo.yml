@@ -1,0 +1,69 @@
+- name: Copy files for Gentoo
+  copy:
+    src: gentoo/
+    dest: /
+    mode: u=rw,g=r,o=r
+
+- name: Place the file to apply LICENSE flags for sys-kernel/linux-firmware
+  template:
+    src: gentoo/etc/portage/package.license/sys-kernel.linux-firmware.use.j2
+    dest: /etc/portage/package.license/sys-kernel.linux-firmware.use
+    mode: u=rw,g=r,o=r
+
+- name: Install basic packages
+  portage:
+    package: "{{ item }}"
+    update: yes
+  with_items:
+    - app-admin/sudo
+    - app-portage/eix
+    - app-portage/gentoolkit
+    - net-dns/avahi
+    - net-dns/bind-tools
+    - net-misc/ntp
+    - sys-apps/pciutils
+    - sys-auth/nss-mdns
+    - sys-boot/efibootmgr
+    - sys-fs/btrfs-progs
+    - sys-fs/dosfstools
+    - sys-kernel/genkernel
+    - sys-kernel/gentoo-sources
+    - sys-process/htop
+    - sys-process/lsof
+
+- name: Install packages for development
+  portage:
+    package: "{{ item }}"
+    update: yes
+  with_items:
+    - app-admin/sudo
+    - app-emulation/docker
+    - app-emulation/docker-compose
+    - dev-vcs/git
+    - sys-devel/clang-common
+- name: Start docker daemon
+  service:
+    name: docker
+    enabled: true
+    state: started
+
+- name: Append the docker group to current user groups
+  user:
+    name: "{{ ansible_user_id }}"
+    groups: docker
+    append: true
+
+- name: Install utility packages
+  portage:
+    package: "{{ item }}"
+    update: yes
+  with_items:
+    - app-editors/vim
+    - app-eselect/eselect-fontconfig
+    - app-i18n/nkf
+    - app-misc/jq
+    - app-misc/screenfetch
+    - app-misc/tmux
+    - app-shells/zsh
+    - app-text/tree
+    - media-fonts/powerline-symbols
