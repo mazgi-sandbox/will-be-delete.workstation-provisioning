@@ -7,8 +7,9 @@ services:
     volumes:
       - provisioning-dot-config:/root/.config
       - provisioning-tmp:/tmp/provisioning
-      - .:/workspace
+      - /root/.ssh/known_hosts
       - ${HOME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - .:/workspace
     environment:
       - TF_DATA_DIR=/tmp/provisioning
     command:
