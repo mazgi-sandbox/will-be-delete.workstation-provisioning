@@ -7,7 +7,7 @@ services:
     volumes:
       - provisioning-dot-config:/root/.config
       - provisioning-tmp:/tmp/provisioning
-      - /root/.ssh/known_hosts
+      - /root/.ssh
       - ${HOME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
       - .:/workspace
     environment:
