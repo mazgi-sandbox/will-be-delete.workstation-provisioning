@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  provisioning:
+    build:
+      context: Dockerfile.d/provisioning
+    working_dir: /workspace
+    volumes:
+      - provisioning-dot-config:/root/.config
+      - provisioning-tmp:/tmp/provisioning
+      - .:/workspace
+      - ${HOME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+    environment:
+      - TF_DATA_DIR=/tmp/provisioning
+    command:
+      - bash
+      - -c
+      - |
+        ansible localhost -m setup
+volumes:
+  provisioning-dot-config:
+    driver: local
+  provisioning-tmp:
+    driver: local
