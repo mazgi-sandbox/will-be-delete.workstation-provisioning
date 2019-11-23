@@ -1,8 +1,11 @@
-- name: Place the file to add the Go path into the PATH
+- name: Place the files to add the path into the PATH
   template:
-    src: default/etc/profile.d/go.sh.j2
-    dest: /etc/profile.d/go.sh
+    src: "default/etc/profile.d/{{ item }}.j2"
+    dest: "/etc/profile.d/{{ item }}"
     mode: u=rwx,g=rx,o=rx
+  with_items:
+    - ghq.sh
+    - go.sh
 
 - name: Unarchive go
   unarchive:
@@ -10,14 +13,34 @@
     dest: /opt
     remote_src: true
 
-- include_tasks: gentoo.yml
+- name: Install direnv via GitHub
+  get_url:
+    url: "https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.{{ ansible_system | lower }}-amd64"
+    dest: /usr/local/bin/direnv
+    mode: u=rwx,g=rx,o=rx
+
+- name: Create directory for ghq
+  file:
+    path: /opt/ghq
+    state: directory
+- name: Unarchive ghq
+  unarchive:
+    src: "https://github.com/motemen/ghq/releases/download/v0.12.9/ghq_{{ ansible_system | lower }}_amd64.zip"
+    dest: /opt/ghq
+    remote_src: true
+    extra_opts: "-j"
+
+- name: Include Gentoo specific provisioning
+  include_tasks: gentoo.yml
   when:
     - ansible_distribution == "Gentoo"
-- include_tasks: ubuntu18.yml
+- name: Include Ubuntu 18 specific provisioning
+  include_tasks: ubuntu18.yml
   when:
     - ansible_distribution == "Ubuntu"
     - ansible_distribution_major_version == "18"
-- include_tasks: debian9.yml
+- name: Include Debian 9 specific provisioning
+  include_tasks: debian9.yml
   when:
     - ansible_distribution == "Debian"
     - ansible_distribution_major_version == "9"
