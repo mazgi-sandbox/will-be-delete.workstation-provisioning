@@ -22,8 +22,6 @@
     state: link
   with_items:
     - ._git
-    - .bash_profile
-    - .screenrc
     - .tmux
     - .tmux.conf
     - .vim
