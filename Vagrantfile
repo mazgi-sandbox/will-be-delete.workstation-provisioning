@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
       vbox.memory = 4096
     end
     gentoo.vm.synced_folder ".", "/vagrant"
-    gentoo.vm.provision "shell", inline: "sudo emaint sync --auto"
+    gentoo.vm.provision "shell", inline: "sudo emaint sync --auto || true"
     gentoo.vm.provision "shell", inline: "sudo emerge --oneshot -uq app-portage/gentoolkit"
     gentoo.vm.provision "shell", inline: "USE='sqlite' sudo -E emerge --oneshot -uNq dev-lang/python"
     gentoo.vm.provision "shell", inline: "PYTHON_TARGETS='python3_6' sudo -E emerge --oneshot -uq app-admin/ansible"
