@@ -1,6 +1,7 @@
 ---
 - name: Setup my workstation
   hosts: all
-  become: true
   roles:
-    - workstation
+    - role: workstation-system
+      become: true
+    - role: workstation-personal

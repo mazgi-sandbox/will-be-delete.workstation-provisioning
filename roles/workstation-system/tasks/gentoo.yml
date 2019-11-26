@@ -40,7 +40,8 @@
     - app-emulation/docker
     - app-emulation/docker-compose
     - dev-vcs/git
-    - sys-devel/clang-common
+    - sys-devel/clang
+    - sys-devel/llvm
 - name: Start docker daemon
   service:
     name: docker

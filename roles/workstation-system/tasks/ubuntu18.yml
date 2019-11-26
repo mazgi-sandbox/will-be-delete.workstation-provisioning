@@ -1,12 +1,25 @@
-- name: Add Docker gpg key
+- name: Add apt repository gpg keys
   apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-- name: Add Docker repository
+    url: "{{ item }}"
+  with_items:
+    - https://download.docker.com/linux/ubuntu/gpg
+    - https://apt.llvm.org/llvm-snapshot.gpg.key
+
+- name: Add apt repositories
   apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    repo: "{{ item }}"
+  with_items:
+    - "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    - "deb http://apt.llvm.org/{{ ansible_distribution_release }}/ llvm-toolchain-{{ ansible_distribution_release }} main"
+    - "deb-src http://apt.llvm.org/{{ ansible_distribution_release }}/ llvm-toolchain-{{ ansible_distribution_release }} main"
+
 - name: Install packages for development
   apt:
     pkg:
+      - locales
+      - procps
+      - dialog
+      - unzip
       - curl
       - git
       - build-essential
@@ -18,6 +31,7 @@
       - docker-ce
       - docker-ce-cli
       - containerd.io
+      - libclang-dev
 
 - name: Install Docker Compose via GitHub
   get_url:

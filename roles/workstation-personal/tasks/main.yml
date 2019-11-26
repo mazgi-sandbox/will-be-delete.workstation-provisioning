@@ -1,0 +1,41 @@
+- name: Install rust
+  shell: "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path"
+  args:
+    creates: "{{ ansible_user_dir }}/.cargo/bin/rustup"
+- name: Install packages via cargo
+  shell: "PATH=$PATH:{{ ansible_user_dir }}/.cargo/bin cargo install {{ item }}"
+  args:
+    creates: "{{ ansible_user_dir }}/.cargo/bin/{{ item }}"
+  with_items:
+    - bat
+    - starship
+
+- name: Clone dotfiles
+  git:
+    repo: https://github.com/mazgi/.dotfiles.git
+    dest: "{{ ansible_user_dir }}/.dotfiles"
+
+- name: Create symlinks from dotfiles
+  file:
+    src: "{{ ansible_user_dir }}/.dotfiles/{{ item }}"
+    dest: "{{ ansible_user_dir }}/{{ item }}"
+    state: link
+  with_items:
+    - ._git
+    - .tmux
+    - .tmux.conf
+    - .vim
+    - .vimrc
+    - .zsh
+    - .zshrc
+- name: Create symlink from gitconfig
+  file:
+    src: "{{ ansible_user_dir }}/.dotfiles/.__AVOID_GIT_CONFLICT__.gitconfig"
+    dest: "{{ ansible_user_dir }}/.gitconfig"
+    state: link
+
+- name: Set login shell
+  become: true
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /bin/zsh
