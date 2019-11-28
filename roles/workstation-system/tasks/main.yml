@@ -74,7 +74,7 @@
         state: touch
         mode: a+rx
     - name: Run install script for Hub command
-      script: /bin/bash "{{ temporary_directory_for_hub_command.path }}/install"
+      command: /bin/bash "{{ temporary_directory_for_hub_command.path }}/install"
 
 - name: Unarchive go
   unarchive:
