@@ -101,11 +101,11 @@
   args:
     creates: /opt/ghq/ghq
 
-- name: Install fzf via GitHub
-  get_url:
-    url: "https://github.com/junegunn/fzf-bin/releases/download/0.19.0/fzf-0.19.0-{{ ansible_system | lower }}_amd64.tgz"
-    dest: /usr/local/bin/fzf
-    mode: u=rwx,g=rx,o=rx
+- name: Unarchive fzf
+  unarchive:
+    src: "https://github.com/junegunn/fzf-bin/releases/download/0.19.0/fzf-0.19.0-{{ ansible_system | lower }}_amd64.tgz"
+    dest: /usr/local/bin
+    remote_src: true
 - name: Install fzf-tmux via GitHub
   get_url:
     url: https://raw.githubusercontent.com/junegunn/fzf/0.19.0/bin/fzf-tmux
