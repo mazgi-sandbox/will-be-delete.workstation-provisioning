@@ -18,6 +18,7 @@
     - app-admin/sudo
     - app-portage/eix
     - app-portage/gentoolkit
+    - net-analyzer/netcat
     - net-dns/avahi
     - net-dns/bind-tools
     - net-misc/ntp

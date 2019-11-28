@@ -16,22 +16,22 @@
 - name: Install packages for development
   apt:
     pkg:
-      - locales
-      - procps
-      - dialog
-      - unzip
-      - curl
-      - git
-      - build-essential
       - apt-transport-https
+      - build-essential
       - ca-certificates
+      - containerd.io
       - curl
-      - gnupg-agent
-      - software-properties-common
+      - dialog
       - docker-ce
       - docker-ce-cli
-      - containerd.io
+      - git
+      - gnupg-agent
       - libclang-dev
+      - locales
+      - netcat
+      - procps
+      - software-properties-common
+      - unzip
 
 - name: Install Docker Compose via GitHub
   get_url:
