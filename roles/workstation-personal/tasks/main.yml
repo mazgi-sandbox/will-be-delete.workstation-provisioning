@@ -20,8 +20,10 @@
     src: "{{ ansible_user_dir }}/.dotfiles/{{ item }}"
     dest: "{{ ansible_user_dir }}/{{ item }}"
     state: link
+    force: true
   with_items:
     - ._git
+    - .profile
     - .tmux
     - .tmux.conf
     - .vim
