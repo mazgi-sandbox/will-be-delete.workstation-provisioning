@@ -49,7 +49,7 @@
   with_items:
     - ghq.sh
     - go.sh
-    # - locales.sh
+    - locales.sh
 
 - name: Stat Hub command
   stat:
