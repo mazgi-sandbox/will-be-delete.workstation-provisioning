@@ -32,6 +32,7 @@
       - procps
       - software-properties-common
       - unzip
+      - vim
 
 - name: Install Docker Compose via GitHub
   get_url:
