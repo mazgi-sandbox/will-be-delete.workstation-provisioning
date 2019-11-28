@@ -51,6 +51,31 @@
     - go.sh
     # - locales.sh
 
+- name: Stat Hub command
+  stat:
+    path: /usr/local/bin/hub
+  register: hub_command
+- name: Install Hub command
+  when: hub_command.stat.executable is not defined
+  block:
+    - name: Create temporary directory for Hub command
+      tempfile:
+        state: directory
+      register: temporary_directory_for_hub_command
+    - name: Unarchive Hub command
+      unarchive:
+        src: "https://github.com/github/hub/releases/download/v2.13.0/hub-{{ ansible_system | lower }}-amd64-2.13.0.tgz"
+        dest: "{{ temporary_directory_for_hub_command.path }}"
+        remote_src: true
+        extra_opts: --strip-components=1
+    - name: Add exec permission to install script
+      file:
+        path: "{{ temporary_directory_for_hub_command.path }}/install"
+        state: touch
+        mode: a+rx
+    - name: Run install script for Hub command
+      script: /bin/bash "{{ temporary_directory_for_hub_command.path }}/install"
+
 - name: Unarchive go
   unarchive:
     src: https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz
