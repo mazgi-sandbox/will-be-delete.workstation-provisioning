@@ -1,8 +1,7 @@
 version: "3.7"
 services:
   provisioning:
-    build:
-      context: Dockerfile.d/provisioning
+    build: Dockerfile.d/provisioning
     working_dir: /workspace
     volumes:
       - provisioning-dot-config:/root/.config
