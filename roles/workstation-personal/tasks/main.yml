@@ -1,6 +1,6 @@
 - name: Clone zinit
   git:
-    repo: https://github.com/zdharma/zinit.git ~/.zinit/bin
+    repo: https://github.com/zdharma/zinit.git
     dest: "{{ ansible_user_dir }}/.zinit/bin"
 
 - name: Copy zshrc
