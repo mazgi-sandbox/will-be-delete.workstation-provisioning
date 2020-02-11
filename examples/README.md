@@ -4,11 +4,11 @@ Available languages: [日本語](README.ja.md)
 
 ## List of examples
 
-| name                                   | IaaS |
-| -------------------------------------- | ---- |
-| [simple-gce-on-gcp](simple-gce-on-gcp) | GCP  |
-| [gpu-on-gcp](gpu-on-gcp)               | GCP  |
-| [https-on-gcp](https-on-gcp)           | GCP  |
+| title                                    | link                                 | IaaS |
+| ---------------------------------------- | ------------------------------------ | ---- |
+| One Instance on GCP                      | [simple-vm-on-gcp](simple-vm-on-gcp) | GCP  |
+| One Step Instance and GPU Workers on GCP | [gpu-on-gcp](gpu-on-gcp)             | GCP  |
+| One Step Instance and Web Servers on GCP | [https-on-gcp](https-on-gcp)         | GCP  |
 
 ## Appendix
 
