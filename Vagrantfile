@@ -8,12 +8,17 @@ Vagrant.configure("2") do |config|
       vbox.memory = 4096
     end
     gentoo.vm.synced_folder ".", "/vagrant"
-    gentoo.vm.provision "shell", inline: "sudo emaint sync --auto || true"
-    gentoo.vm.provision "shell", inline: "sudo emerge --oneshot -uq app-portage/gentoolkit"
-    gentoo.vm.provision "shell", inline: "USE='sqlite' sudo -E emerge --oneshot -uNq dev-lang/python"
-    gentoo.vm.provision "shell", inline: "PYTHON_TARGETS='python3_6' sudo -E emerge --oneshot -uq app-admin/ansible"
+    gentoo.vm.provision "shell", inline: "emaint sync --auto || true"
+    gentoo.vm.provision "shell", inline: "emerge --oneshot -uq app-portage/gentoolkit"
+    gentoo.vm.provision "shell", inline: "USE='sqlite' emerge --oneshot -uNq dev-lang/python"
+    gentoo.vm.provision "shell", inline: "USE='drafts' emerge --oneshot -uNq net-libs/zeromq"
+    gentoo.vm.provision "shell", inline: "PYTHON_TARGETS='python3_6' emerge --oneshot -uq app-admin/ansible"
+    gentoo.vm.provision "shell", inline: "mkdir -p /etc/ansible/roles"
+    gentoo.vm.provision "shell", inline: "chmod o+rw /etc/ansible/roles"
     gentoo.vm.provision "ansible_local" do |ansible|
       ansible.compatibility_mode = "2.0"
+      ansible.galaxy_role_file = 'requirements.yml'
+      ansible.galaxy_roles_path = '/etc/ansible/roles'
       ansible.playbook = "site.yml"
     end
   end
@@ -21,18 +26,26 @@ Vagrant.configure("2") do |config|
   config.vm.define "debian9" do |debian9|
     debian9.vm.box = "generic/debian9"
     debian9.vm.synced_folder ".", "/vagrant"
+    debian9.vm.provision "shell", inline: "mkdir -p /etc/ansible/roles"
+    debian9.vm.provision "shell", inline: "chmod o+rw /etc/ansible/roles"
     debian9.vm.provision "ansible_local" do |ansible|
       ansible.install_mode = "pip"
       ansible.compatibility_mode = "2.0"
+      ansible.galaxy_role_file = 'requirements.yml'
+      ansible.galaxy_roles_path = '/etc/ansible/roles'
       ansible.playbook = "site.yml"
     end
   end
 
   config.vm.define "ubuntu18" do |ubuntu18|
     ubuntu18.vm.box = "ubuntu/bionic64"
+    ubuntu18.vm.provision "shell", inline: "mkdir -p /etc/ansible/roles"
+    ubuntu18.vm.provision "shell", inline: "chmod o+rw /etc/ansible/roles"
     ubuntu18.vm.provision "ansible_local" do |ansible|
       ansible.install_mode = "pip"
       ansible.compatibility_mode = "2.0"
+      ansible.galaxy_role_file = 'requirements.yml'
+      ansible.galaxy_roles_path = '/etc/ansible/roles'
       ansible.playbook = "site.yml"
     end
   end

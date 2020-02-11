@@ -1,45 +1,13 @@
-- name: Install rust
-  shell: "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path"
-  args:
-    creates: "{{ ansible_user_dir }}/.cargo/bin/rustup"
-- name: Install packages via cargo
-  shell: "PATH=$PATH:{{ ansible_user_dir }}/.cargo/bin cargo install {{ item }}"
-  args:
-    creates: "{{ ansible_user_dir }}/.cargo/bin/{{ item }}"
-  with_items:
-    - bat
-    - starship
-
-- name: Clone dotfiles
+- name: Clone zinit
   git:
-    repo: https://github.com/mazgi/.dotfiles.git
-    dest: "{{ ansible_user_dir }}/.dotfiles"
+    repo: https://github.com/zdharma/zinit.git
+    dest: "{{ ansible_user_dir }}/.zinit/bin"
 
-- name: Create symlinks from dotfiles
-  file:
-    src: "{{ ansible_user_dir }}/.dotfiles/{{ item }}"
-    dest: "{{ ansible_user_dir }}/{{ item }}"
-    state: link
-    force: true
-  with_items:
-    - ._git
-    - .profile
-    - .tmux
-    - .tmux.conf
-    - .vim
-    - .vimrc
-    - .zsh
-    - .zshrc
-- name: Create symlink from gitconfig
-  file:
-    src: "{{ ansible_user_dir }}/.dotfiles/.__AVOID_GIT_CONFLICT__.gitconfig"
-    dest: "{{ ansible_user_dir }}/.gitconfig"
-    state: link
-
-- name: Install zsh completion for Hub
-  get_url:
-    url: https://raw.githubusercontent.com/github/hub/v2.13.0/etc/hub.zsh_completion
-    dest: "{{ ansible_user_dir }}/.zsh/completions/_hub"
+- name: Copy zshrc
+  copy:
+    src: .zshrc
+    dest: "{{ ansible_user_dir }}/"
+    mode: u=rw,g=r,o=r
 
 - name: Set login shell
   become: true
