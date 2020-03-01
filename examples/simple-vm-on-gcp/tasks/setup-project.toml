@@ -1,0 +1,15 @@
+extend = [
+  { path = ".setup-project.create-dotenv-file.toml" }
+]
+
+[config]
+skip_core_tasks = true
+min_version = "0.26.1"
+
+[tasks.prepare]
+cwd = "${CARGO_MAKE_CURRENT_TASK_INITIAL_MAKEFILE_DIRECTORY}/../"
+
+[tasks.default]
+dependencies = [
+  "create-dotenv-file"
+]

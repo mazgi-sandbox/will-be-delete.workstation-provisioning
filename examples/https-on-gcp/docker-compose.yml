@@ -1,0 +1,48 @@
+version: "3.7"
+
+services:
+  provisioning:
+    build:
+      context: Dockerfile.d/provisioning
+      args:
+        UID: ${UID:-0}
+        GID: ${GID:-0}
+    working_dir: /workspace
+    environment:
+      - TF_DATA_DIR=/tmp/provisioning
+      - GOOGLE_CLOUD_KEYFILE_JSON=/workspace/credentials/google-cloud-keyfile.json
+      - GOOGLE_APPLICATION_CREDENTIALS=/workspace/credentials/google-cloud-keyfile.json
+      - CLOUDSDK_CORE_PROJECT
+      - PROJECT_UNIQUE_ID
+      - TF_VAR_gcp_project_id
+      - TF_VAR_gcp_default_region
+      - TF_VAR_parent_dns_zone_name
+      - TF_VAR_basename
+      - TF_VAR_base_domain_name
+      - TF_VAR_acceptable_source_ipaddr_list
+      - TF_VAR_workstatsion_instance_type
+    volumes:
+      - provisioning-tmp:/tmp/provisioning
+      - provisioning-dotconfig:/root/.config # for macOS
+      - provisioning-dotconfig:/developer/.config
+      - provisioning-dotdocker:/root/.docker # for macOS
+      - provisioning-dotdocker:/developer/.docker
+      - .:/workspace
+    command:
+      - bash
+      - -c
+      - |
+        gcloud auth activate-service-account --key-file=/workspace/.config/credentials/google-cloud-keyfile.json
+        gsutil ls gs://${PROJECT_UNIQUE_ID}-provisioning/ > /dev/null 2>&1\
+        || gsutil mb gs://${PROJECT_UNIQUE_ID}-provisioning/
+        gsutil acl set private gs://${PROJECT_UNIQUE_ID}-provisioning/
+        gsutil versioning set on gs://${PROJECT_UNIQUE_ID}-provisioning/
+        terraform init -backend-config="bucket=${PROJECT_UNIQUE_ID}-provisioning"
+
+volumes:
+  provisioning-tmp:
+    driver: local
+  provisioning-dotconfig:
+    driver: local
+  provisioning-dotdocker:
+    driver: local

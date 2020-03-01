@@ -1,0 +1,10 @@
+# This is a duckscript file.
+# https://github.com/sagiegurari/duckscript
+
+echo
+echo Please input the IP Address that accepts as the source of SSH and HTTPS connections.
+echo Enter your value:
+acceptable_source_ipaddr_list = read
+if is_empty ${acceptable_source_ipaddr_list}
+  assert_error "Please retry and input the IP Address"
+end
