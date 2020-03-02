@@ -1,0 +1,25 @@
+- name: Create a new primary partition
+  parted:
+    device: /dev/nvme0n1
+    label: gpt
+    number: 1
+    state: present
+
+- name: Create a XFS filesystem on the partition
+  filesystem:
+    fstype: xfs
+    dev: /dev/nvme0n1p1
+
+- name: Mount the filesystem
+  mount:
+    path: "{{ ansible_user_dir }}/Creations"
+    src: /dev/nvme0n1p1
+    fstype: xfs
+    state: mounted
+
+- name: Fix permission
+  file:
+    path: "{{ ansible_user_dir }}/Creations"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: u=rwx,g=rx,o=r

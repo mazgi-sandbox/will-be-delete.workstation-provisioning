@@ -2,6 +2,8 @@
 - name: Setup my workstation
   hosts: all
   roles:
+    - role: workstation-storage
+      become: true
     - role: mazgi.cargo_make
       version: "2020.1.0"
       become: true
