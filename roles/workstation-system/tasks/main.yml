@@ -92,6 +92,19 @@
     - name: Run install script for Hub command
       command: /bin/bash "{{ temporary_directory_for_hub_command.path }}/install"
 
+- name: Stat starship command
+  stat:
+    path: /usr/local/bin/starship
+  register: starship_command
+- name: Install starship command
+  when: starship_command.stat.executable is not defined
+  block:
+    - name: Unarchive starship command
+      unarchive:
+        src: "https://github.com/starship/starship/releases/download/v0.37.0/starship-x86_64-unknown-{{ ansible_system | lower }}-musl.tar.gz"
+        dest: /usr/local/bin
+        remote_src: true
+
 - name: Unarchive go
   unarchive:
     src: https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz

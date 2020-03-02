@@ -19,5 +19,6 @@ zinit light github/hub
 zinit ice silent as"completion" mv'hub.zsh_completion -> _hub' 
 zinit snippet https://github.com/github/hub/raw/master/etc/hub.zsh_completion
 
-zinit ice from"gh-r" as"program" atclone'./starship init zsh > zhook.zsh' atpull'%atclone' src"zhook.zsh"
-zinit light starship/starship
+# zinit ice from"gh-r" as"program" atclone'./starship init zsh > zhook.zsh' atpull'%atclone' src"zhook.zsh"
+# zinit light starship/starship
+eval "$(starship init zsh)"
