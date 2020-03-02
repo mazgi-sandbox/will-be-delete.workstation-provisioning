@@ -5,17 +5,46 @@
     number: 1
     state: present
 
-- name: Create a XFS filesystem on the partition
+- name: Create a filesystem on the partition
   filesystem:
-    fstype: xfs
+    fstype: btrfs
     dev: /dev/nvme0n1p1
 
-- name: Mount the filesystem
+- name: Mount the filesystem for create subvolumes
+  mount:
+    path: /mnt/btrfs
+    src: /dev/nvme0n1p1
+    fstype: btrfs
+    state: mounted
+
+- name: Create subvolumes on the filesystem
+  shell: "btrfs subvolume create {{ item }}"
+  args:
+    chdir: /mnt/btrfs
+  with_items:
+    - home-creations
+    - var-lib-docker
+
+- name: Mount the filesystems
   mount:
     path: "{{ ansible_user_dir }}/Creations"
     src: /dev/nvme0n1p1
-    fstype: xfs
+    fstype: btrfs
+    opts: "defaults,subvol=home-creations"
     state: mounted
+
+- name: Mount the filesystems
+  mount:
+    path: /var/lib/docker
+    src: /dev/nvme0n1p1
+    fstype: btrfs
+    opts: "defaults,subvol=var-lib-docker"
+    state: mounted
+
+- name: Unmount the filesystem for create subvolumes
+  mount:
+    path: /mnt/btrfs
+    state: absent
 
 - name: Fix permission
   file:
