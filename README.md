@@ -22,17 +22,17 @@ docker-compose run provisioning ansible-playbook -i 192.0.2.1, -u $(id -un) site
 
 ## How to provision on bare-metal hosts
 
-provision localhost:
-
-```shellsession
-pip install --user ansible==2.9.2
-ansible-playbook -i localhost, -c local -u $(id -un) site.yml
-```
-
 provision remote hosts:
 
 ```shellsession
-pip install --user ansible==2.9.2
-echo TARGET-IPADDRS-OR-FQDNS > inventories/hosts
-docker-compose run provisioning ansible-playbook -i inventories/hosts -u $(id -un) site.yml
+export GITHUB_USER=$(id -un)
+docker-compose run provisioning ansible-playbook --inventory FQDN, --user $GITHUB_USER workstation-provisioning/site.yml
+```
+
+provision localhost:
+
+```shellsession
+pip install --user ansible~=2.9
+export GITHUB_USER=$(id -un)
+ansible-playbook --connection local --inventory localhost, --user $GITHUB_USER site.yml
 ```

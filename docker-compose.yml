@@ -4,10 +4,11 @@ services:
     build: Dockerfile.d/provisioning
     working_dir: /workspace
     volumes:
-      - provisioning-dot-config:/root/.config
       - provisioning-tmp:/tmp/provisioning
-      - /root/.ssh
-      - ${HOME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - provisioning-home:/home/developer # To hold ~/{.config, .docker, ...},
+      - provisioning-home:/root # for macOS
+      - ${HOME}/.ssh/id_rsa:/home/developer/.ssh/id_rsa:ro
+      - ${HOME}/.ssh/id_rsa:/root/.ssh/id_rsa:ro # for macOS
       - .:/workspace
     environment:
       - TF_DATA_DIR=/tmp/provisioning
@@ -15,9 +16,9 @@ services:
       - bash
       - -c
       - |
-        ansible localhost -m setup
+        ansible-galaxy install --role-file requirements.yml
 volumes:
-  provisioning-dot-config:
-    driver: local
   provisioning-tmp:
+    driver: local
+  provisioning-home:
     driver: local
