@@ -34,6 +34,7 @@
       - libclang-dev
       - locales
       - netcat
+      - pkg-config
       - procps
       - software-properties-common
       - unzip
