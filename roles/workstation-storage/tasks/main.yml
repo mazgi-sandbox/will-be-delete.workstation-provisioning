@@ -1,54 +1,49 @@
-- name: Create a new primary partition
+- name: Get information the partition
   parted:
-    device: /dev/nvme0n1
-    label: gpt
-    number: 1
-    state: present
+    device: "/dev/{{ scratch_disk_device_name }}"
+  register: device_information
 
-- name: Create a filesystem on the partition
-  filesystem:
-    fstype: btrfs
-    dev: /dev/nvme0n1p1
-
-- name: Mount the filesystem for create subvolumes
-  mount:
-    path: /mnt/btrfs
-    src: /dev/nvme0n1p1
-    fstype: btrfs
-    state: mounted
-
-- name: Create subvolumes on the filesystem
-  shell: "btrfs subvolume create {{ item }}"
-  args:
-    chdir: /mnt/btrfs
-  with_items:
-    - home-creations
-    - var-lib-docker
-
-- name: Mount the filesystems
-  mount:
-    path: "{{ ansible_user_dir }}/Creations"
-    src: /dev/nvme0n1p1
-    fstype: btrfs
-    opts: "defaults,subvol=home-creations"
-    state: mounted
-
-- name: Mount the filesystems
-  mount:
-    path: /var/lib/docker
-    src: /dev/nvme0n1p1
-    fstype: btrfs
-    opts: "defaults,subvol=var-lib-docker"
-    state: mounted
-
-- name: Unmount the filesystem for create subvolumes
-  mount:
-    path: /mnt/btrfs
-    state: absent
-
-- name: Fix permission
-  file:
-    path: "{{ ansible_user_dir }}/Creations"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-    mode: u=rwx,g=rx,o=r
+- name: Set up partitions
+  when: device_information.partitions | length == 0
+  block:
+    - name: Create a new primary partition
+      parted:
+        device: "/dev/{{ scratch_disk_device_name }}"
+        label: gpt
+        number: 1
+        state: present
+    - name: Create a filesystem on the partition
+      filesystem:
+        fstype: btrfs
+        dev: "/dev/{{ scratch_disk_device_name }}p1"
+    - name: Mount the filesystem for create subvolumes
+      mount:
+        path: /mnt/btrfs
+        src: "/dev/{{ scratch_disk_device_name }}p1"
+        fstype: btrfs
+        state: mounted
+    - name: Create subvolumes on the filesystem
+      shell: "btrfs subvolume create {{ item.name }}"
+      args:
+        chdir: /mnt/btrfs
+      with_items: "{{ scratch_disk_sub_volume }}"
+    - name: Mount the filesystems
+      mount:
+        path: "{{ item.mount_point }}"
+        src: "/dev/{{ scratch_disk_device_name }}p1"
+        fstype: btrfs
+        opts: "defaults,subvol={{ item.name }}"
+        state: mounted
+      with_items: "{{ scratch_disk_sub_volume }}"
+    - name: Unmount the filesystem for create subvolumes
+      mount:
+        path: /mnt/btrfs
+        state: absent
+    - name: Change ownership
+      file:
+        path: "{{ item.mount_point }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: "{{ item.mode | default('u=rwx,g=rx,o=r') }}"
+      with_items: "{{ scratch_disk_sub_volume }}"
+      when: item.owner is defined and item.group is defined
