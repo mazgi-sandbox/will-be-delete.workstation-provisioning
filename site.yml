@@ -4,6 +4,15 @@
   roles:
     - role: workstation-storage
       become: true
+      vars:
+        scratch_disk_device_name: nvme0n1
+        scratch_disk_sub_volume:
+          - name: "home-{{ ansible_user }}-creations"
+            mount_point: "/home/{{ ansible_user }}/Creations"
+            owner: "{{ ansible_user }}"
+            group: "{{ ansible_user }}"
+          - name: var-lib-docker
+            mount_point: /var/lib/docker
     - role: mazgi.cargo_make
       version: "2020.1.0"
       become: true
