@@ -11,7 +11,7 @@ compinit -C
 zinit ice silent wait:0; zinit light zsh-users/zsh-completions
 zinit ice silent wait:0 atload:_zsh_autosuggest_start
 zinit light zsh-users/zsh-autosuggestions
-zinit ice silent wait:0; zinit light zdharma/fast-syntax-highlighting
+zinit ice silent wait:0; zinit light zsh-users/zsh-syntax-highlighting
 zinit ice silent wait:0; zinit light zsh-users/zsh-history-substring-search
 
 zinit ice from"gh-r" as"program" mv"hub-*/bin/hub -> hub" atclone'./hub alias -s > zhook.zsh' atpull'%atclone'
