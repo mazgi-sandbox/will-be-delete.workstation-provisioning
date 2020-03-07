@@ -3,7 +3,11 @@
     repo: https://github.com/zdharma/zinit.git
     dest: "{{ ansible_user_dir }}/.zinit/bin"
 
-- name: Copy zshrc
+- stat:
+    path: "{{ ansible_user_dir }}/.zshrc"
+  register: zshrc_stat
+- name: Copy zshrc if not provisioned
+  when: zshrc_stat.stat.islnk is defined and zshrc_stat.stat.islnk == False
   copy:
     src: .zshrc
     dest: "{{ ansible_user_dir }}/"
