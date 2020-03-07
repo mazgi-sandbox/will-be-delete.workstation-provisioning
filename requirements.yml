@@ -1,2 +1,3 @@
 - src: mazgi.google_compute_engine_scratch_disk
 - src: mazgi.cargo_make
+- src: mazgi.1password_cli

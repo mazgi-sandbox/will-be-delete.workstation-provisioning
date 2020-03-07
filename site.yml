@@ -8,6 +8,9 @@
     - role: mazgi.cargo_make
       version: 2020.1.0
       become: true
+    - role: mazgi.1password_cli
+      version: 2020.3.0
+      become: true
     - role: workstation-system
       become: true
     - role: workstation-personal
