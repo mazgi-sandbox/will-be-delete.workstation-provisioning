@@ -1,0 +1,68 @@
+- homebrew_tap:
+    name: "homebrew/bundle"
+- homebrew_tap:
+    name: "homebrew/cask"
+- homebrew_tap:
+    name: "homebrew/cask-drivers"
+- homebrew_tap:
+    name: "homebrew/cask-fonts"
+- homebrew_tap:
+    name: "homebrew/core"
+- homebrew_tap:
+    name: "mazgi/betagarden"
+
+- homebrew:
+    formula:
+      - bat
+      - coreutils
+      - ffmpeg
+      - fping
+      - fzf
+      - git-lfs
+      - gnu-tar
+      - gnupg
+      - go
+      - htop
+      - iftop
+      - imagemagik"
+      - jq
+      - mas
+      - mkcert
+      - nkf
+      - nmap
+      - pwgen
+      - rustup-int"
+      - terraform
+      - tflint
+      - tmux
+      - tree
+      - unar
+      - watch
+
+- homebrew_cask:
+    cask:
+      - 1password
+      - 1password-cli
+      - adobe-creative-cloud
+      - blender
+      - clip-studio-paint
+      - docker
+      - firefox
+      - font-source-code-pro
+      - font-source-code-pro-for-powerline
+      - google-chrome
+      - grammarly
+      - hyper
+      - mono-mdk
+      - skype
+      - spectacle
+      - steam
+      - unity-hub
+      - vagrant
+      - virtualbox
+      - virtualbox-extension-pack
+      - visual-studio-code
+      - vivaldi
+      - vlc
+      - wacom-tablet
+      - zoomus
