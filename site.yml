@@ -3,7 +3,7 @@
   hosts: all
   roles:
     - role: mazgi.google_compute_engine_scratch_disk
-      version: 2020.3.0
+      version: 2020.3.1
       become: true
     - role: mazgi.cargo_make
       version: 2020.1.0
