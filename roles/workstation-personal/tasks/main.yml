@@ -1,8 +1,3 @@
-- name: Include macOS specific provisioning
-  include_tasks: macos.yml
-  when:
-    - ansible_distribution == 'MacOSX'
-
 - name: Clone zinit
   git:
     repo: https://github.com/zdharma/zinit.git

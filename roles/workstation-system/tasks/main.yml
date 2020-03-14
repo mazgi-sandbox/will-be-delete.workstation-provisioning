@@ -2,3 +2,8 @@
   include_tasks: linux.yml
   when:
     - ansible_distribution == "Gentoo" or ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+- name: Include macOS specific provisioning
+  include_tasks: macos.yml
+  when:
+    - ansible_distribution == 'MacOSX'
