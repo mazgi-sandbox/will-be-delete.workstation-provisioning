@@ -2,20 +2,3 @@
   include_tasks: linux.yml
   when:
     - ansible_distribution == "Gentoo" or ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
-
-- name: Install direnv via GitHub
-  get_url:
-    url: "https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.{{ ansible_system | lower }}-amd64"
-    dest: /usr/local/bin/direnv
-    mode: u=rwx,g=rx,o=rx
-
-- name: Unarchive fzf
-  unarchive:
-    src: "https://github.com/junegunn/fzf-bin/releases/download/0.19.0/fzf-0.19.0-{{ ansible_system | lower }}_amd64.tgz"
-    dest: /usr/local/bin
-    remote_src: true
-- name: Install fzf-tmux via GitHub
-  get_url:
-    url: https://raw.githubusercontent.com/junegunn/fzf/0.19.0/bin/fzf-tmux
-    dest: /usr/local/bin/fzf-tmux
-    mode: u=rwx,g=rx,o=rx
