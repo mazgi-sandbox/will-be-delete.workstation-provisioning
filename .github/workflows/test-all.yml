@@ -20,8 +20,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ansible~=2.9
-      - name: Install dependencies
+      - name: Provision
         run: |
+          ansible-galaxy install --role-file requirements.yml
           ansible-playbook --connection local --inventory localhost, --user $USER_ site.yml
         env:
           USER_: mazgi

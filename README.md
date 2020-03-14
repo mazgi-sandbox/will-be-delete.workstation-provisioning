@@ -1,17 +1,19 @@
 # workstation-provisioning
 
+![GitHub Actions status for "test-all"](https://github.com/mazgi/workstation-provisioning/workflows/test-all/badge.svg)
+
 Available languages: [日本語](README.ja.md)
 
 ## How to try it with Vagrant
 
 ```shellsession
-vagrant up
+vagrant up ubuntu18
 ```
 
 or
 
 ```shellsession
-vagrant provision
+vagrant provision ubuntu18
 ```
 
 ## How to provision via Docker Compose
@@ -36,3 +38,7 @@ pip install --user ansible~=2.9
 export GITHUB_USER=$(id -un)
 ansible-playbook --connection local --inventory localhost, --user $GITHUB_USER site.yml
 ```
+
+## Links
+
+- https://github.com/geerlingguy/macos-virtualbox-vm
