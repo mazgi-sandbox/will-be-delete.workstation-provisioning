@@ -1,0 +1,22 @@
+name: test-all
+
+on:
+  push:
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.x"
+      - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ansible~=2.9
