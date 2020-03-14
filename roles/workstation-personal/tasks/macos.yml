@@ -24,7 +24,7 @@
       - go
       - htop
       - iftop
-      - imagemagik"
+      - imagemagick
       - jq
       - mas
       - mkcert
