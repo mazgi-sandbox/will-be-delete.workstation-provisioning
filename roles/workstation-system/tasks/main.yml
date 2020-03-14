@@ -23,6 +23,8 @@
     name: "{{ item }}"
   with_items:
     - en_US.UTF-8
+  when:
+    - ansible_distribution == "Gentoo" or ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
 
 - name: Generate locales via devconf
   debconf:
@@ -51,6 +53,7 @@
   when:
     - ansible_distribution == "Debian"
     - ansible_distribution_major_version == "9"
+
 - name: Include Ubuntu 18 specific provisioning
   include_tasks: ubuntu18.yml
   when:
@@ -66,6 +69,8 @@
     - ghq.sh
     - go.sh
     - locales.sh
+  when:
+    - ansible_distribution == "Gentoo" or ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
 
 - name: Stat Hub command
   stat:
@@ -97,7 +102,9 @@
     path: /usr/local/bin/starship
   register: starship_command
 - name: Install starship command
-  when: starship_command.stat.executable is not defined
+  when:
+    - starship_command.stat.executable is not defined
+    - ansible_distribution == "Gentoo" or ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
   block:
     - name: Unarchive starship command
       unarchive:
@@ -110,6 +117,8 @@
     src: https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz
     dest: /opt
     remote_src: true
+  when:
+    - ansible_distribution == "Gentoo" or ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
 
 - name: Install direnv via GitHub
   get_url:
